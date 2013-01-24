@@ -1,1 +1,7 @@
-This is DIY project made to control LED RGB stripes and make them smart and online with addition of additional sensors and TP-LINK WR703N router running OpenWrt
+This is DIY project made to control LED RGB stripes and make them smart and 
+online with addition of additional sensors and TP-LINK WR703N router running OpenWrt
+
+For future contributors (probably someone from LabOS):
+To have write access to this repository you have to have github account
+and you should be added to "ThisRepo/Settings/Contributors/"
+No need for adding your crypto public key to labos-medialab account
