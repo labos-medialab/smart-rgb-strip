@@ -4,25 +4,13 @@ const int redPin = 3;
 const int greenPin = 5;
 const int bluePin = 6;
 
-int FADESPEED = 10;
-int Brightness = 100;
-
-int z1=0,z2=0,z3=0;
-
 int redInt=0,greenInt=0,blueInt=0;
 
-boolean stringComplete = false;
 String inputString = "";
 String nullString = "";
 String prefixString = "";
 String sufixString = "";
-String redString = "";
-String greenString = "";
-String blueString = "";
-String FADESPEEDString = "";
-String BrightnessString = "";
 
-char redChar[4], greenChar[4], blueChar[4], FADESPEEDChar[4], BrightnessChar[4];
 
 void setup() {
 
@@ -34,105 +22,87 @@ void setup() {
   inputString.reserve(200);
   prefixString.reserve(10);
   sufixString.reserve(20);
-  redString.reserve(10);
-  greenString.reserve(10);
-  blueString.reserve(10);
-  FADESPEEDString.reserve(10);
-  BrightnessString.reserve(10);
 }
 
 void loop() {
-  if (stringComplete) {
-    inputString = "";
-    stringComplete = false;
-  }
 
-  z1 = inputString.indexOf(';');
-  z2 = inputString.length();
-  
-  prefixString = inputString.substring(0,z1);
-  sufixString = inputString.substring(z1+1,z2);
-  
+  if (inputString == nullString) dynamicRGB(100,255);
+  else pretvorba();
 
-  
- // dinamycRGB();
-  if (prefixString == "static"){
-    staticRGB();
-  }
-  
-  if (prefixString == "dynamic"){
-    dynamicRGB();
-  //staticRGB();
-  }
-  delay(50);
-  
+    delay(100);
 }
 
 void serialEvent() {
   inputString=nullString;
   while (Serial.available() > 0) {
-    char inChar = (char)Serial.read(); 
+    char inChar = (char)Serial.read();
     inputString += inChar;
-    if (inChar == '\n') {
-      stringComplete = true;
-    } 
+    if (inChar == '\n') break; 
   }
 }
 
-void Ispis() {
-  Serial.println(inputString);
-  Serial.println(prefixString);
-  Serial.println(sufixString);
-//  Serial.println(blueInt);
-delay(5000);
-}
+void pretvorba(){
+int z1=0,z2=0;
 
+  z1 = inputString.indexOf(';');
+  z2 = inputString.length();
 
+  prefixString = inputString.substring(0,z1);
+  sufixString = inputString.substring(z1+1,z2);
 
-void staticRGB()
-{
-  
+  if (prefixString == "static"){
+    
+  int z1=0,z2=0,z3=0;
+
+  String redString = "";
+  String greenString = "";
+  String blueString = "";
+  redString.reserve(10);
+  greenString.reserve(10);
+  blueString.reserve(10);
+
+  char redChar[4], greenChar[4], blueChar[4]; 
+
   z1 = sufixString.indexOf(',');
   z2 = sufixString.lastIndexOf(',');
   z3 = sufixString.lastIndexOf(';');
-  
-  redString = sufixString.substring(0,z1);
-  greenString = sufixString.substring(z1+1,z2);
-  blueString = sufixString.substring(z2+1,z3);
-  
-  redString.toCharArray(redChar, 4);
-  greenString.toCharArray(greenChar, 4);
-  blueString.toCharArray(blueChar, 4);
-  
-  redInt = atoi(redChar);
-  blueInt = atoi(blueChar);
-  greenInt = atoi(greenChar);
-  
-  analogWrite(redPin, redInt);
-  analogWrite(greenPin, greenInt);
-  analogWrite(bluePin, blueInt);
-  
-  
+
+  redString = sufixString.substring(0,z1); redString.toCharArray(redChar, 4); redInt = atoi(redChar);
+  greenString = sufixString.substring(z1+1,z2); greenString.toCharArray(greenChar, 4); greenInt = atoi(greenChar);
+  blueString = sufixString.substring(z2+1,z3); blueString.toCharArray(blueChar, 4); blueInt = atoi(blueChar);
+
+
+
+  staticRGB(redInt,greenInt,blueInt);
 }
 
-void dynamicRGB (){
+ if (prefixString == "dynamic"){  
   
+  int z1=0,z2=0;
+  int FADESPEED = 10;
+  int Brightness = 100;
+  
+  String FADESPEEDString = "";
+  String BrightnessString = "";
+  FADESPEEDString.reserve(10);
+  BrightnessString.reserve(10);
+  
+  char FADESPEEDChar[10], BrightnessChar[4];
+
   z1 = sufixString.indexOf(',');
   z2 = sufixString.lastIndexOf(';');
 
   
-  FADESPEEDString = sufixString.substring(0,z1);
-  BrightnessString = sufixString.substring(z1+1,z2);
-  
-  
-  FADESPEEDString.toCharArray(FADESPEEDChar, 4);
-  BrightnessString.toCharArray(BrightnessChar, 4);
-  
-  
-  FADESPEED = atoi(FADESPEEDChar);
-  Brightness = atoi(BrightnessChar);
-  
-  
+  FADESPEEDString = sufixString.substring(0,z1); FADESPEEDString.toCharArray(FADESPEEDChar, 10); FADESPEED = atoi(FADESPEEDChar);
+  BrightnessString = sufixString.substring(z1+1,z2); BrightnessString.toCharArray(BrightnessChar, 4); Brightness = atoi(BrightnessChar);
+
+  dynamicRGB(FADESPEED, Brightness);
+
+ }
+}
+
+void dynamicRGB(int fs, int b)
+{
   int a;
   
   while(redInt +  greenInt  + blueInt != 0){
@@ -147,79 +117,76 @@ void dynamicRGB (){
   analogWrite(greenPin, greenInt);
   analogWrite(bluePin, blueInt);
   
-  delay(FADESPEED);
+   delay(fs);
   
   }
+  
+  
   delay(100);
   
-  for (a = 0; a < Brightness+1; a++) { 
+  for (a = 0; a < b+1; a++) { 
     if (Serial.available() > 0) break;
     analogWrite(redPin, a);
-    delay(FADESPEED);
+     delay(fs);
   } 
   
   while (1){
  
-  // plava ++
-  for (a = 0; a < Brightness+1; a++) {
-   if (Serial.available() > 0) break;
+  for (a = 0; a < b+1; a++) {
+   if (Serial.available() > 0) break; 
     analogWrite(bluePin, a);
-    delay(FADESPEED);
+     delay(fs);
   } 
 if (Serial.available() > 0) break;
-  //crvena --
-  for (a = Brightness; a > 0; a--) { 
+  
+  for (a = b; a > 0; a--) { 
     if (Serial.available() > 0) break;
     analogWrite(redPin, a);
-    delay(FADESPEED);
+     delay(fs);
   } 
 if (Serial.available() > 0) break;
-  // zelena ++
-  for (a = 0; a < Brightness+1; a++) { 
+  
+  for (a = 0; a < b+1; a++) { 
     if (Serial.available() > 0) break;
     analogWrite(greenPin, a);
-    delay(FADESPEED);
+     delay(fs);
   } 
 if (Serial.available() > 0) break;
-  //plava --
-  for (a = Brightness; a > 0; a--) { 
+  
+  for (a = b; a > 0; a--) { 
     if (Serial.available() > 0) break;
     analogWrite(bluePin, a);
-    delay(FADESPEED);
+     delay(fs);
   } 
 if (Serial.available() > 0) break;
-  //crvena ++
-  for (a = 0; a < Brightness+1; a++) { 
+  
+  for (a = 0; a < b+1; a++) { 
     if (Serial.available() > 0) break;
     analogWrite(redPin, a);
-    delay(FADESPEED);
+     delay(fs);
   } 
 if (Serial.available() > 0) break;
-  //zelena --
-  for (a = Brightness; a > 0; a--) { 
+  
+  for (a = b; a > 0; a--) { 
     if (Serial.available() > 0) break;
     analogWrite(greenPin, a);
-    delay(FADESPEED);
+     delay(fs);
   }
 if (Serial.available() > 0) break; 
   }
 }
 
-void fadeout(){
-  while(redInt != 0 && greenInt != 0 && blueInt != 0){
-    
-  if(redInt != 0) redInt--;
+void staticRGB(int a, int b, int c)
+{
+  while(1){
+
+ 
+  analogWrite(redPin, a);
+  analogWrite(greenPin, b);
+  analogWrite(bluePin, c);
   
-  if(greenInt != 0) greenInt--;
+
   
-  if(blueInt != 0) blueInt--;
-  
-  analogWrite(redPin, redInt);
-  analogWrite(greenPin, greenInt);
-  analogWrite(bluePin, blueInt);
-  
-  delay(10);
-  
+  if(Serial.available() > 0) break;
   }
-  delay(100);
 }
