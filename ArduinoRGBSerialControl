@@ -26,7 +26,81 @@ void setup() {
 
 void loop() {
 
-  if (inputString == nullString) dynamicRGB(100,255);
+  if (inputString == nullString) dynamicRGB(50,255);
+  
+  else if(inputString == "r"){//red
+    redInt=255;
+    greenInt=0;
+    blueInt=0;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "o"){//orange
+    redInt=255;
+    greenInt=128;
+    blueInt=0;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "y"){//y
+    redInt=255;
+    greenInt=255;
+    blueInt=0;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "yg" || inputString == "gy"){//yellow-green
+    redInt=128;
+    greenInt=255;
+    blueInt=0;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "g"){//green
+    redInt=0;
+    greenInt=255;
+    blueInt=0;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "gb" || inputString == "bg"){//green-blue
+    redInt=0;
+    greenInt=255;
+    blueInt=128;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "c"){//cyan
+    redInt=0;
+    greenInt=255;
+    blueInt=255;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "a"){//azure
+    redInt=0;
+    greenInt=128;
+    blueInt=255;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "b"){//blue
+    redInt=0;
+    greenInt=0;
+    blueInt=255;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "v"){//violet
+    redInt=128;
+    greenInt=0;
+    blueInt=255;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "m"){//magenta
+    redInt=255;
+    greenInt=0;
+    blueInt=255;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "r"){//rose
+    redInt=255;
+    greenInt=0;
+    blueInt=128;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  
   else pretvorba();
 
     delay(100);
@@ -35,22 +109,21 @@ void loop() {
 void serialEvent() {
   inputString=nullString;
   while (Serial.available() > 0) {
-    char inChar = (char)Serial.read();
-    inputString += inChar;
-    if (inChar == '\n') break; 
+    inputString +=char(Serial.read());
+ // delay(10); 
   }
 }
 
 void pretvorba(){
 int z1=0,z2=0;
 
-  z1 = inputString.indexOf(';');
+  z1 = inputString.indexOf(':');
   z2 = inputString.length();
 
   prefixString = inputString.substring(0,z1);
   sufixString = inputString.substring(z1+1,z2);
 
-  if (prefixString == "static"){
+  if (prefixString == "rgb"){
     
   int z1=0,z2=0,z3=0;
 
@@ -65,7 +138,7 @@ int z1=0,z2=0;
 
   z1 = sufixString.indexOf(',');
   z2 = sufixString.lastIndexOf(',');
-  z3 = sufixString.lastIndexOf(';');
+  z3 = sufixString.length();
 
   redString = sufixString.substring(0,z1); redString.toCharArray(redChar, 4); redInt = atoi(redChar);
   greenString = sufixString.substring(z1+1,z2); greenString.toCharArray(greenChar, 4); greenInt = atoi(greenChar);
@@ -76,7 +149,7 @@ int z1=0,z2=0;
   staticRGB(redInt,greenInt,blueInt);
 }
 
- if (prefixString == "dynamic"){  
+ else if (prefixString == "d"){  
   
   int z1=0,z2=0;
   int FADESPEED = 10;
@@ -90,7 +163,7 @@ int z1=0,z2=0;
   char FADESPEEDChar[10], BrightnessChar[4];
 
   z1 = sufixString.indexOf(',');
-  z2 = sufixString.lastIndexOf(';');
+  z2 = sufixString.length();
 
   
   FADESPEEDString = sufixString.substring(0,z1); FADESPEEDString.toCharArray(FADESPEEDChar, 10); FADESPEED = atoi(FADESPEEDChar);
@@ -100,7 +173,7 @@ int z1=0,z2=0;
 
  }
  
-if (prefixString == "pulse"){
+else if (prefixString == "p"){
   
   int z1=0,z2=0,z3=0;
   int pulsN0;
@@ -117,7 +190,7 @@ if (prefixString == "pulse"){
   
   z1 = sufixString.indexOf(',');
   z2 = sufixString.lastIndexOf(',');
-  z3 = sufixString.lastIndexOf(';');
+  z3 = sufixString.length();
   
   pulsN0String = sufixString.substring(0,z1); pulsN0String.toCharArray(pulsN0Char, 4); pulsN0 = atoi(pulsN0Char);
   FADESPEEDString = sufixString.substring(z1+1,z2); FADESPEEDString.toCharArray(FADESPEEDChar, 10); FADESPEED = atoi(FADESPEEDChar);
@@ -126,6 +199,8 @@ if (prefixString == "pulse"){
   pulse(pulsN0,FADESPEED,Brightness);
   
 }
+
+else staticRGB(100,100,100);
 }
 
 void dynamicRGB(int fs, int b)
