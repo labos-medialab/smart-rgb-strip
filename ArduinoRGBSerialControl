@@ -132,6 +132,7 @@ void serialEvent() {
 void pretvorba(){
   
   char numChar[4];
+  int numInt;
   
   //odvajanje stringa
   prefixString = inputString.substring(0,inputString.indexOf(':'));
@@ -155,7 +156,7 @@ void pretvorba(){
     staticRGB(redInt,greenInt,blueInt);
   }
   
-  else if (prefixString == "d"){  
+  else if (prefixString == "dF"){  
     int FADESPEED = 10;
     int Brightness = 100;
     
@@ -171,7 +172,7 @@ void pretvorba(){
     dynamicRGB(FADESPEED, Brightness);
   }
   
-  else if (prefixString == "p"){
+  else if (prefixString == "pF"){
     
     int pulsN0 = 2;
     int FADESPEED = 10;
@@ -194,7 +195,7 @@ void pretvorba(){
     pulse(pulsN0,FADESPEED,Brightness);
   }
   
-  else if(prefixString == "r"){
+  else if(prefixString == "red"){
     
     
     if(sufixString.endsWith(percentString)==0){
@@ -210,7 +211,7 @@ void pretvorba(){
     staticRGB(redInt,greenInt,blueInt);
   }
   
-  else if(prefixString == "g"){
+  else if(prefixString == "green"){
     
     
     if(sufixString.endsWith(percentString)==0){
@@ -226,7 +227,7 @@ void pretvorba(){
     staticRGB(redInt,greenInt,blueInt);
   }
   
-  else if(prefixString == "b"){
+  else if(prefixString == "blue"){
     
     
     
@@ -245,82 +246,160 @@ void pretvorba(){
   
   else if(prefixString == "r"){//red
   
-  
-    redInt=255;
+    if(sufixString.endsWith(percentString)==1){
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    }
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
+    
+    
+    redInt = map(numInt, 0, 100, 0, 255);
     greenInt=0;
     blueInt=0;
-    staticRGB(redInt,greenInt,blueInt); 
+    staticRGB(redInt,greenInt,blueInt);
   }
   else if(prefixString == "o"){//orange
-    redInt=255;
-    greenInt=128;
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
+    redInt = map(numInt, 0, 100, 0, 255);
+    greenInt = map(numInt, 0, 100, 0, 128);
     blueInt=0;
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "y"){//y
-    redInt=255;
-    greenInt=255;
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+      
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
+    redInt = map(numInt, 0, 100, 0, 255);
+    greenInt = map(numInt, 0, 100, 0, 255);
     blueInt=0;
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "yg" || prefixString == "gy"){//yellow-green
-    redInt=128;
-    greenInt=255;
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
+    redInt = map(numInt, 0, 100, 0, 128);
+    greenInt = map(numInt, 0, 100, 0, 255);
     blueInt=0;
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "g"){//green
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
     redInt=0;
-    greenInt=255;
+    greenInt = map(numInt, 0, 100, 0, 255);
     blueInt=0;
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "gb" || prefixString == "bg"){//green-blue
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
     redInt=0;
-    greenInt=255;
-    blueInt=128;
+    greenInt = map(numInt, 0, 100, 0, 255);
+    blueInt = map(numInt, 0, 100, 0, 128);
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "c"){//cyan
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
     redInt=0;
-    greenInt=255;
-    blueInt=255;
+    greenInt = map(numInt, 0, 100, 0, 255);
+    blueInt = map(numInt, 0, 100, 0, 255);
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "a"){//azure
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
     redInt=0;
-    greenInt=128;
-    blueInt=255;
+    greenInt = map(numInt, 0, 100, 0, 128);
+    blueInt = map(numInt, 0, 100, 0, 255);
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "b"){//blue
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
     redInt=0;
     greenInt=0;
-    blueInt=255;
+    blueInt = map(numInt, 0, 100, 0, 255);
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "v"){//violet
-    redInt=128;
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
+    redInt = map(numInt, 0, 100, 0, 128);
     greenInt=0;
-    blueInt=255;
+    blueInt = map(numInt, 0, 100, 0, 255);
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "m"){//magenta
-    redInt=255;
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
+    redInt = map(numInt, 0, 100, 0, 255);
     greenInt=0;
-    blueInt=255;
+    blueInt = map(numInt, 0, 100, 0, 255);
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "p"){//pink
-    redInt=255;
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
+    redInt = map(numInt, 0, 100, 0, 255);
     greenInt=0;
-    blueInt=128;
+    blueInt = map(numInt, 0, 100, 0, 128);
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "w"){//pink
-    redInt=255;
-    greenInt=255;
-    blueInt=255;
+  
+    if(sufixString.endsWith(percentString)==1)
+      sufixString = sufixString.substring(0,sufixString.length()-1);
+    
+    sufixString.toCharArray(numChar, 4); numInt = atoi(numChar);
+    
+    redInt = map(numInt, 0, 100, 0, 255);
+    greenInt = map(numInt, 0, 100, 0, 255);
+    blueInt = map(numInt, 0, 100, 0, 255);
     staticRGB(redInt,greenInt,blueInt); 
   }
   else if(prefixString == "0"){
