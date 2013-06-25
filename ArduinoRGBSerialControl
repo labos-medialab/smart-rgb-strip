@@ -94,10 +94,16 @@ void loop() {
     blueInt=255;
     staticRGB(redInt,greenInt,blueInt); 
   }
-  else if(inputString == "r"){//rose
+  else if(inputString == "p"){//pink
     redInt=255;
     greenInt=0;
     blueInt=128;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(inputString == "w"){//pink
+    redInt=255;
+    greenInt=255;
+    blueInt=255;
     staticRGB(redInt,greenInt,blueInt); 
   }
   
