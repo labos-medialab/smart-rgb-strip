@@ -131,6 +131,8 @@ void serialEvent() {
 
 void pretvorba(){
   
+  char numChar[4];
+  
   //odvajanje stringa
   prefixString = inputString.substring(0,inputString.indexOf(':'));
   sufixString = inputString.substring(inputString.indexOf(':')+1,inputString.length());
@@ -194,15 +196,14 @@ void pretvorba(){
   
   else if(prefixString == "r"){
     
-    char redChar[4];
     
     if(sufixString.endsWith(percentString)==0){
-      sufixString.toCharArray(redChar, 4); redInt = atoi(redChar);
+      sufixString.toCharArray(numChar, 4); redInt = atoi(numChar);
     }
     
     else {
       sufixString = sufixString.substring(0,sufixString.length()-1);
-      sufixString.toCharArray(redChar, 4); redInt = atoi(redChar);
+      sufixString.toCharArray(numChar, 4); redInt = atoi(numChar);
       redInt = map(redInt, 0, 100, 0, 255);
     }
     
@@ -211,15 +212,14 @@ void pretvorba(){
   
   else if(prefixString == "g"){
     
-    char greenChar[4];
     
     if(sufixString.endsWith(percentString)==0){
-      sufixString.toCharArray(greenChar, 4); greenInt = atoi(greenChar);
+      sufixString.toCharArray(numChar, 4); greenInt = atoi(numChar);
     }
     
     else {
       sufixString = sufixString.substring(0,sufixString.length()-1);
-      sufixString.toCharArray(greenChar, 4); greenInt = atoi(greenChar);
+      sufixString.toCharArray(numChar, 4); greenInt = atoi(numChar);
       greenInt = map(greenInt, 0, 100, 0, 255);
     }
     
@@ -228,18 +228,105 @@ void pretvorba(){
   
   else if(prefixString == "b"){
     
-    char blueChar[4];
+    
     
     if(sufixString.endsWith(percentString)==0){
-      sufixString.toCharArray(blueChar, 4); blueInt = atoi(blueChar);    
+      sufixString.toCharArray(numChar, 4); blueInt = atoi(numChar);    
     }
     
     else {
       sufixString = sufixString.substring(0,sufixString.length()-1);
-      sufixString.toCharArray(blueChar, 4); blueInt = atoi(blueChar);
+      sufixString.toCharArray(numChar, 4); blueInt = atoi(numChar);
       blueInt = map(blueInt, 0, 100, 0, 255);
     }
     
+    staticRGB(redInt,greenInt,blueInt);
+  }
+  
+  else if(prefixString == "r"){//red
+  
+  
+    redInt=255;
+    greenInt=0;
+    blueInt=0;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "o"){//orange
+    redInt=255;
+    greenInt=128;
+    blueInt=0;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "y"){//y
+    redInt=255;
+    greenInt=255;
+    blueInt=0;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "yg" || prefixString == "gy"){//yellow-green
+    redInt=128;
+    greenInt=255;
+    blueInt=0;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "g"){//green
+    redInt=0;
+    greenInt=255;
+    blueInt=0;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "gb" || prefixString == "bg"){//green-blue
+    redInt=0;
+    greenInt=255;
+    blueInt=128;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "c"){//cyan
+    redInt=0;
+    greenInt=255;
+    blueInt=255;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "a"){//azure
+    redInt=0;
+    greenInt=128;
+    blueInt=255;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "b"){//blue
+    redInt=0;
+    greenInt=0;
+    blueInt=255;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "v"){//violet
+    redInt=128;
+    greenInt=0;
+    blueInt=255;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "m"){//magenta
+    redInt=255;
+    greenInt=0;
+    blueInt=255;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "p"){//pink
+    redInt=255;
+    greenInt=0;
+    blueInt=128;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "w"){//pink
+    redInt=255;
+    greenInt=255;
+    blueInt=255;
+    staticRGB(redInt,greenInt,blueInt); 
+  }
+  else if(prefixString == "0"){
+    redInt=0;
+    greenInt=0;
+    blueInt=0;
     staticRGB(redInt,greenInt,blueInt);
   }
   
