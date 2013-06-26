@@ -29,8 +29,11 @@ void loop() {
 
   //demo pri paljenju
   if (inputString == nullString) dynamicRGB(50,255);
-  
-  
+
+  else if(inputString == "pF") pulse(2,1500,255);
+
+  else if(inputString == "dF") dynamicRGB(20,255);
+
   else if(inputString == "r"){//red
     redInt=255;
     greenInt=0;
