@@ -28,93 +28,101 @@ void loop() {
   //demo pri paljenju
   if (inputString == nullString) dynamicRGB(50,255);
   
-  else if(inputString == "pF") pulse(2,1500,255);
+  if(inputString == "pF") pulse(2,1500,255);
 
-  else if(inputString == "dF") dynamicRGB(20,255);
+  if(inputString == "dF") dynamicRGB(20,255);
   
-  else if(inputString == "r"){//red
-    redInt=255;
-    greenInt=0;
-    blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "o"){//orange
-    redInt=255;
-    greenInt=128;
-    blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "y"){//y
-    redInt=255;
-    greenInt=255;
-    blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
-  }
+  if(inputString.indexOf(":")==-1){
+    
+    if(inputString == "red") redInt=255;
+    if(inputString == "green") greenInt=255;
+    if(inputString == "blue") blueInt=255;
+    
+    if(inputString == "r"){//red
+      redInt=255;
+      greenInt=0;
+      blueInt=0;    
+    }
+    else if(inputString == "o"){//orange
+      redInt=255;
+      greenInt=128;
+      blueInt=0;    
+    }
+    else if(inputString == "y"){//y
+      redInt=255;
+      greenInt=255;
+      blueInt=0;
+    }
   else if(inputString == "yg" || inputString == "gy"){//yellow-green
     redInt=128;
     greenInt=255;
     blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
+    
   }
   else if(inputString == "g"){//green
     redInt=0;
     greenInt=255;
     blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
+    
   }
   else if(inputString == "gb" || inputString == "bg"){//green-blue
     redInt=0;
     greenInt=255;
     blueInt=128;
-    staticRGB(redInt,greenInt,blueInt);
+    
   }
   else if(inputString == "c"){//cyan
     redInt=0;
     greenInt=255;
     blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
+    
   }
   else if(inputString == "a"){//azure
     redInt=0;
     greenInt=128;
     blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
+    
   }
   else if(inputString == "b"){//blue
     redInt=0;
     greenInt=0;
     blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
+    
   }
   else if(inputString == "v"){//violet
     redInt=128;
     greenInt=0;
     blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
+    
   }
   else if(inputString == "m"){//magenta
     redInt=255;
     greenInt=0;
     blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
+    
   }
   else if(inputString == "p"){//pink
     redInt=255;
     greenInt=0;
     blueInt=128;
-    staticRGB(redInt,greenInt,blueInt);
+    
   }
   else if(inputString == "w"){//pink
     redInt=255;
     greenInt=255;
     blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
+    
   }
   else if(inputString == "0"){
     redInt=0;
     greenInt=0;
     blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
+    
+  }
+  else {
+    Serial.println(inputString);
+    inputString=nullString;
+  }
   }
   
   
@@ -193,7 +201,7 @@ void pretvorba(){
     
     else {
       sufixString = sufixString.substring(0,sufixString.length()-1);
-      redInt = tempString.toInt();
+      redInt = sufixString.toInt();
       redInt = map(redInt, 0, 100, 0, 255);
     }
     
@@ -207,7 +215,7 @@ void pretvorba(){
     
     else {
       sufixString = sufixString.substring(0,sufixString.length()-1);
-      greenInt = tempString.toInt();
+      greenInt = sufixString.toInt();
       greenInt = map(greenInt, 0, 100, 0, 255);
     }
     
@@ -221,7 +229,7 @@ void pretvorba(){
     
     else {
       sufixString = sufixString.substring(0,sufixString.length()-1);
-      blueInt = tempString.toInt();
+      blueInt = sufixString.toInt();
       blueInt = map(blueInt, 0, 100, 0, 255);
     }
     
@@ -393,7 +401,10 @@ void pretvorba(){
     staticRGB(redInt,greenInt,blueInt);
   }
   
-  else staticRGB(100,100,100);
+  else{  
+    Serial.println(inputString);
+    inputString=nullString;
+  }
   
   
 }//pretvorba
@@ -475,17 +486,14 @@ void dynamicRGB(int fs, int b){
 
 void staticRGB(int a, int b, int c){
   
-  while(1){
-    
     analogWrite(redPin, a);
     analogWrite(greenPin, b);
     analogWrite(bluePin, c);
-    
-    if(Serial.available() > 0) break;
-  }
+
 }
 
 void pulse(int p,int fs, int b){
+  while(1){
   
   int a=0,bp=0;
   
@@ -625,4 +633,5 @@ void pulse(int p,int fs, int b){
     if (Serial.available() > 0) break;
   }
   while(bp<p);bp=0;
+}
 }
