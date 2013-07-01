@@ -428,14 +428,7 @@ void pretvorba(){
     greenInt = map(tempInt, 0, 100, 0, 255);
     blueInt = map(tempInt, 0, 100, 0, 255);
     staticRGB(redInt,greenInt,blueInt); 
-  }
-  else if(prefixString == "0"){
-    redInt=0;
-    greenInt=0;
-    blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  
+  }  
   else{} 
 }//pretvorba
 
