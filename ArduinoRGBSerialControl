@@ -440,7 +440,6 @@ void pretvorba(){
 }//pretvorba
 
 void dynamicRGB(int fs, int b){
-  inputString=nullString;
   delay(10);
   int a;
   
@@ -452,6 +451,8 @@ void dynamicRGB(int fs, int b){
     analogWrite(redPin, redInt);
     analogWrite(greenPin, greenInt);
     analogWrite(bluePin, blueInt);
+    
+    if (Serial.available() > 0) break;
     
     delay(fs);
   }
@@ -471,24 +472,18 @@ void dynamicRGB(int fs, int b){
       analogWrite(bluePin, a);
       delay(fs);
     } 
-  
-    if (Serial.available() > 0) break;
-  
+    
     for (a = b; a > 0; a--) { 
       if (Serial.available() > 0) break;
       analogWrite(redPin, a);
       delay(fs);
     }
     
-    if (Serial.available() > 0) break;
-  
     for (a = 0; a < b+1; a++) { 
       if (Serial.available() > 0) break;
       analogWrite(greenPin, a);
       delay(fs);
     } 
-  
-    if (Serial.available() > 0) break;
   
     for (a = b; a > 0; a--) { 
       if (Serial.available() > 0) break;
@@ -496,16 +491,12 @@ void dynamicRGB(int fs, int b){
       delay(fs);
     } 
   
-    if (Serial.available() > 0) break;
-  
     for (a = 0; a < b+1; a++) { 
       if (Serial.available() > 0) break;
       analogWrite(redPin, a);
       delay(fs);
     } 
-  
-    if (Serial.available() > 0) break;
-  
+    
     for (a = b; a > 0; a--) { 
       if (Serial.available() > 0) break;
       analogWrite(greenPin, a);
@@ -525,7 +516,6 @@ void staticRGB(int a, int b, int c){
 }
 
 void pulse(int p,int fs, int b){
-  while(1){
   
   int a=0,bp=0;
   
@@ -665,5 +655,4 @@ void pulse(int p,int fs, int b){
     if (Serial.available() > 0) break;
   }
   while(bp<p);bp=0;
-}
 }
