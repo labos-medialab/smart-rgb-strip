@@ -30,7 +30,7 @@ void loop() {
   //demo pri paljenju
   if (inputString == nullString && flag == 0){
     flag=1;
-    dynamicRGB(50,255);
+    dynamicRGB(20,255);
   }
   
   else if(inputString == "pF") pulse(2,1500,255);
@@ -441,6 +441,7 @@ void pretvorba(){
 
 void dynamicRGB(int fs, int b){
   inputString=nullString;
+  delay(10);
   int a;
   
   while(redInt +  greenInt  + blueInt != 0){
@@ -524,7 +525,6 @@ void staticRGB(int a, int b, int c){
 }
 
 void pulse(int p,int fs, int b){
-  inputString=nullString;
   while(1){
   
   int a=0,bp=0;
