@@ -33,137 +33,44 @@ void loop() {
     dynamicRGB(20,255);
   }
   
+  else if(inputString.indexOf(":")>0) pretvorba();
   else if(inputString == "pF") pulse(2,1500,255);
-
   else if(inputString == "dF") dynamicRGB(20,255);
   
-  else if(inputString == "red"){
-    redInt=255;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "green"){
-    greenInt=255;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "blue"){
-    blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "red++"){
-    if (redInt<255) redInt++;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "green++"){
-    if (greenInt<255) greenInt++;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "blue++"){
-    if (blueInt<255) blueInt++;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "red--"){
-    if (redInt>0) redInt--;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "green--"){
-    if (greenInt>0) greenInt-1;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "blue--"){
-    if (blueInt>0) blueInt--;
-    staticRGB(redInt,greenInt,blueInt);
-  }
+  else{
+    if(inputString == "red") redInt=255;
+    else if(inputString == "green") greenInt=255;
+    else if(inputString == "blue") blueInt=255;
     
-  else if(inputString == "r"){//red
-    redInt=255;
-    greenInt=0;
-    blueInt=0;
+    else if(inputString == "red++")  { if(redInt<255) redInt++;}
+    else if(inputString == "green++"){ if(greenInt<255) greenInt++;}
+    else if(inputString == "blue++") { if(blueInt<255) blueInt++;}
+    
+    else if(inputString == "red--")  { if (redInt>0) redInt--;}
+    else if(inputString == "green--"){ if(greenInt>0) greenInt--;}
+    else if(inputString == "blue--") { if(blueInt>0) blueInt--;}
+    
+    else if(inputString == "r") { redInt=255;greenInt=0;blueInt=0;}
+    else if(inputString == "o") { redInt=255;greenInt=128;blueInt=0;}
+    else if(inputString == "y") { redInt=255;greenInt=255;blueInt=0;}
+    else if(inputString == "yg"){ redInt=128;greenInt=255;blueInt=0;}
+    
+    else if(inputString == "g") { redInt=0;greenInt=255;blueInt=0;}
+    else if(inputString == "gb"){ redInt=0;greenInt=255;blueInt=128;}
+    else if(inputString == "c") { redInt=0;greenInt=255;blueInt=255;}
+    else if(inputString == "a") { redInt=0;greenInt=128;blueInt=255;}
+    
+    else if(inputString == "b") { redInt=0;greenInt=0;blueInt=255;}
+    else if(inputString == "v") { redInt=128;greenInt=0;blueInt=255;}
+    else if(inputString == "m") { redInt=255;greenInt=0;blueInt=255;}
+    else if(inputString == "p") { redInt=255;greenInt=0;blueInt=128;}
+    
+    else if(inputString == "w"){ redInt=255;greenInt=255;blueInt=255;}
+    else if(inputString != nullString){ redInt=0;greenInt=0;blueInt=0;}
+    
     staticRGB(redInt,greenInt,blueInt);
   }
-  else if(inputString == "o"){//orange
-    redInt=255;
-    greenInt=128;
-    blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "y"){//y
-    redInt=255;
-    greenInt=255;
-    blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "yg" || inputString == "gy"){//yellow-green
-    redInt=128;
-    greenInt=255;
-    blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "g"){//green
-    redInt=0;
-    greenInt=255;
-    blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "gb" || inputString == "bg"){//green-blue
-    redInt=0;
-    greenInt=255;
-    blueInt=128;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "c"){//cyan
-    redInt=0;
-    greenInt=255;
-    blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "a"){//azure
-    redInt=0;
-    greenInt=128;
-    blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "b"){//blue
-    redInt=0;
-    greenInt=0;
-    blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "v"){//violet
-    redInt=128;
-    greenInt=0;
-    blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "m"){//magenta
-    redInt=255;
-    greenInt=0;
-    blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "p"){//pink
-    redInt=255;
-    greenInt=0;
-    blueInt=128;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "w"){//pink
-    redInt=255;
-    greenInt=255;
-    blueInt=255;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  else if(inputString == "0"){
-    redInt=0;
-    greenInt=0;
-    blueInt=0;
-    staticRGB(redInt,greenInt,blueInt);
-  }
-  
-  
-  else pretvorba();
-  
-
-    delay(100);
+  delay(100);
 }
 
 void serialEvent() {
