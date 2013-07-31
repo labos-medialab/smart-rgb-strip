@@ -90,7 +90,24 @@ void pretvorba(){
   prefixString = inputString.substring(0,inputString.indexOf(':'));
   sufixString = inputString.substring(inputString.indexOf(':')+1,inputString.length());
   
-  if (prefixString == "rgb"){
+  if (prefixString == "#"){
+    int tempIntArray[6];
+    
+    for(int i=0;i<6;i++){
+      tempInt=sufixString.charAt(i);
+      if(tempInt<=57) tempIntArray[i]=tempInt - 48;
+      if(tempInt>64 && tempInt<71) tempIntArray[i]=tempInt - 55;
+      if(tempInt>95 && tempInt<103) tempIntArray[i]=tempInt - 87;
+    }
+    
+    redInt = tempIntArray[0]*16 + tempIntArray[1];
+    greenInt = tempIntArray[2]*16 + tempIntArray[3];
+    blueInt = tempIntArray[4]*16 + tempIntArray[5];
+    
+    staticRGB(redInt,greenInt,blueInt);
+  }
+  
+  else if (prefixString == "rgb"){
     
     tempString = sufixString.substring(0,sufixString.indexOf(','));
     redInt = tempString.toInt();
@@ -412,7 +429,6 @@ void staticRGB(int a, int b, int c){
   analogWrite(redPin, a);
   analogWrite(greenPin, b);
   analogWrite(bluePin, c);
-
 }
 
 void pulse(int p,int fs, int b){
