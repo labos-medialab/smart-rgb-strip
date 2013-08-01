@@ -1,0 +1,99 @@
+<html>
+<head>
+	<title>LED controller</title>
+	<script type='text/javascript' src='js/jquery-1.8.2.min.js' ></script>
+	<script src='js/jquery.form.js'></script>
+	<script src='js/bootstrap.min.js'></script>
+	<script src='js/bootstrap-colorpicker.js'></script>
+
+	<link href='css/bootstrap.min.css' rel='stylesheet' media='screen'>
+	<link href="css/bootstrap-colorpicker.css" rel="stylesheet">
+	<style>
+		.paramsAdditional{display:none;}
+		.alert{display:none;}
+	</style>
+</head>
+<body>
+
+<div class='container'>
+	<h1>LED Controller</h1>
+	<p>Control your LEDs!</p>
+	<form method='POST' action='/cgi-bin/led.sh'>
+		<fieldset>
+			<legend>LED parameters</legend>
+			<label>Type</label>
+			<select name='type' id='typeSelect'>
+				<option value=''>Please select</option>
+				<option value='static'>Static</option>
+				<option value='dynamic'>Dynamic</option>
+				<option value='pulse'>Pulse</option>
+			</select>
+		</fieldset>
+		<fieldset id='static' class='paramsAdditional'>
+			<legend>Static parameters</legend>
+			<label>Color</label>
+			<input type='text' name='s-color' id='s-color' placeholder='#RRGGBB'/>
+		</fieldset>
+		<fieldset id='dynamic' class='paramsAdditional'>
+			<legend>Dynamic parameters</legend>
+			<label>Delay</label>
+			<input type='text' name='d-delay' placeholder='0-999' />
+			<label>Brigthness</label>
+			<input type='text' name='d-brightness' placeholder='0-255' />
+		</fieldset>
+		<fieldset id='pulse' class='paramsAdditional'>
+			<legend>Pulse parameters</legend>
+			<label>Beats per color</label>
+			<input type='text' name='p-beats' placeholder='1-10' />
+			<label>Delay</label>
+			<input type='text' name='p-delay' placeholder='0-999' />
+			<label>Brigthness</label>
+			<input type='text' name='p-brightness' placeholder='0-255' />
+		</fieldset>
+		<input type='submit' value='Make it so!' />
+	</form>
+	<div class="alert alert-error"> </div>
+	<div class="alert alert-success">
+		And done! Do you like it?
+	</div>
+</div>
+
+<script type='text/javascript'>
+
+$('#s-color').colorpicker({ format: 'dec' });
+
+
+$('#typeSelect').change(function() {
+	$('.paramsAdditional').css('display', 'none');
+	$('#' + $(this).val()).css('display', 'block');
+});
+
+$('form').submit(function(){
+	var options = {}
+	if ($('#typeSelect').val() == '') {
+		$('.alert').css('display', 'none');
+		$('.alert-error').css('display', 'block');
+		$('.alert-error').html('Pick type, pal!');
+		return false;
+	}
+	options.error = function(err) {
+		$('.alert').css('display', 'none');
+		$('.alert-error').css('display', 'block');
+		$('.alert-error').html('Error occurred during request. ' + +err.status + ': ' + err.statusText);
+	};
+	options.success = function(resp) {
+		$('.alert').css('display', 'none');
+		if ($.trim(resp) == 'OK') {
+			$('.alert-success').css('display', 'block');
+		} else {
+			$('.alert-error').css('display', 'block');
+			$('.alert-error').html('Ups! Something went wrong :( Please check values and try again!');
+		}
+	};
+	$('form').ajaxSubmit(options);
+	return false;
+});
+
+</script>
+</body>
+</html>
