@@ -7,7 +7,8 @@ boolean flag=0;
 
 //definirane vrijednosti pwm izlaza
 int r1Int=0, g1Int=0, b1Int=0,
-    r2Int=0, g2Int=0, b2Int=0;
+    r2Int=0, g2Int=0, b2Int=0,
+    newr1Int=0, newg1Int=0, newb1Int=0;
     
 int fs=50,b=255;
 
@@ -18,13 +19,26 @@ String inputString = "";//string koji učita sa serijskog
 String nullString = "";//string za reset
 String prefixString = "";//pomoćni string
 String sufixString = "";//pomoćni string
-String percentString = "%";//pomoćni string
+//String percentString = "%";//pomoćni string
 
 void setRGB(){
   fnc=0;
-  analogWrite(r1Pin, r1Int); analogWrite(r2Pin, r2Int);
-  analogWrite(g1Pin, g1Int); analogWrite(g2Pin, g2Int);
-  analogWrite(b1Pin, b1Int); analogWrite(b2Pin, b2Int);
+  while(newr1Int != r1Int || newg1Int != g1Int || newb1Int != b1Int){
+    
+    if(r1Int < newr1Int) r1Int++;
+    if(r1Int > newr1Int) r1Int--;
+    if(g1Int < newg1Int) g1Int++;
+    if(g1Int > newg1Int) g1Int--;
+    if(b1Int < newb1Int) b1Int++;
+    if(b1Int > newb1Int) b1Int--;
+    
+    delay(2);
+    
+    analogWrite(r1Pin, r1Int); analogWrite(r2Pin, r2Int);
+    analogWrite(g1Pin, g1Int); analogWrite(g2Pin, g2Int);
+    analogWrite(b1Pin, b1Int); analogWrite(b2Pin, b2Int);
+  }
+  Serial.println("end");
   while(1) {
     if(Serial.available() > 0) break;
   }
@@ -81,9 +95,9 @@ void serialEvent() {
       if(tempInt>95 && tempInt<103) tempIntArray[i]=tempInt - 87;
     }
     
-    r1Int = tempIntArray[0]*16 + tempIntArray[1];
-    g1Int = tempIntArray[2]*16 + tempIntArray[3];
-    b1Int = tempIntArray[4]*16 + tempIntArray[5];
+    newr1Int = tempIntArray[0]*16 + tempIntArray[1];
+    newg1Int = tempIntArray[2]*16 + tempIntArray[3];
+    newb1Int = tempIntArray[4]*16 + tempIntArray[5];
     
     setRGB();
   }
@@ -94,11 +108,11 @@ void serialEvent() {
     
     if(prefixString == "rgb"){
       tempString = sufixString.substring(0,sufixString.indexOf(','));
-      r1Int = tempString.toInt();
+      newr1Int = tempString.toInt();
       tempString = sufixString.substring(sufixString.indexOf(',')+1,sufixString.lastIndexOf(','));
-      g1Int = tempString.toInt();
+      newg1Int = tempString.toInt();
       tempString = sufixString.substring(sufixString.lastIndexOf(',')+1,sufixString.length());
-      b1Int = tempString.toInt();
+      newb1Int = tempString.toInt();
       setRGB();
     }
     
