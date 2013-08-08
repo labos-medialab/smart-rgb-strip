@@ -29,7 +29,7 @@ case "$type" in
 			echo "FAIL"
 			exit
 		fi
-		echo -n "#:"${color:3:2}${color:5:2}${color:7:2} >> /dev/ttyUSB0;;
+		echo -n "#"${color:3:2}${color:5:2}${color:7:2} >> /dev/ttyUSB0;;
 	"dynamic")
 		delay=$(getParam $POST_DATA d-delay 1)
 		if [ $delay -gt 999 ]
