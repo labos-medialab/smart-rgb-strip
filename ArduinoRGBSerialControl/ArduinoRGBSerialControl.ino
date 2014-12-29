@@ -9,11 +9,11 @@ boolean flag=0;
 int redInt=0,greenInt=0,blueInt=0;
 
 //stringovi
-String inputString = "";//string koji učita sa serijskog
+String inputString = "";//string koji ucita sa serijskog
 String nullString = "";//string za reset
-String prefixString = "";//pomoćni string
-String sufixString = "";//pomoćni string
-String percentString = "%";//pomoćni string
+String prefixString = "";//pomocni string
+String sufixString = "";//pomocni string
+String percentString = "%";//pomocni string
 
 void setup() {
 
@@ -30,12 +30,13 @@ void loop() {
   //demo pri paljenju
   if (inputString == nullString && flag == 0){
     flag=1;
-    dynamicRGB(20,255);
+    lightShow();
   }
   
   else if(inputString.indexOf(":")>0) pretvorba();
-  else if(inputString == "pF") pulse(2,1500,255);
-  else if(inputString == "dF") dynamicRGB(20,255);
+  else if(inputString == "pf") pulse(2,1500,255);
+  else if(inputString == "df") dynamicRGB(20,255);
+  else if(inputString == "ls") lightShow();
   
   else{
     if(inputString == "red") redInt=255;
@@ -121,7 +122,7 @@ void pretvorba(){
     staticRGB(redInt,greenInt,blueInt);
   }
   
-  else if (prefixString == "dF"){  
+  else if (prefixString == "df"){  
     int FADESPEED = 10;
     int Brightness = 100;
     
@@ -135,7 +136,7 @@ void pretvorba(){
     dynamicRGB(FADESPEED, Brightness);
   }
   
-  else if (prefixString == "pF"){
+  else if (prefixString == "pf"){
     
     int pulsN0 = 2;
     int FADESPEED = 10;
@@ -374,6 +375,8 @@ void dynamicRGB(int fs, int b){
     delay(fs);
   }
   
+
+  
   delay(100);
   
   for (a = 0; a < b+1; a++) { 
@@ -424,6 +427,32 @@ void dynamicRGB(int fs, int b){
   }
 }
 
+void lightShow(){
+  while (1)
+  {
+    int microfon_value = analogRead(A5);
+    //Serial.println(microfon_value);
+    if (Serial.available() > 0) break;
+  
+    redInt = blueInt = greenInt = 0;
+    
+    if (microfon_value > 480 && microfon_value < 490)
+      redInt = map(microfon_value, 480, 490, 0, 20);
+    if (microfon_value > 490 && microfon_value < 520)
+      blueInt = map(microfon_value, 490, 520, 0, 20);
+    if (microfon_value > 520 && microfon_value < 540)
+      greenInt = map(microfon_value, 520, 540, 0, 20);
+    if (microfon_value > 540 && microfon_value < 600)
+      redInt = greenInt = map(microfon_value, 560, 600, 0, 40);
+    if (microfon_value > 600 && microfon_value < 1000)
+      redInt = greenInt = map(microfon_value, 560, 1000, 0, 255);
+     
+    analogWrite(redPin, redInt);
+    analogWrite(greenPin, greenInt);
+    analogWrite(bluePin, blueInt);
+  }
+}
+  
 void staticRGB(int a, int b, int c){
   inputString=nullString;
   analogWrite(redPin, a);
