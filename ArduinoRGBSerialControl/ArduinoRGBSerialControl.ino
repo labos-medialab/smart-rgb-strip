@@ -427,7 +427,8 @@ void dynamicRGB(int fs, int b){
   }
 }
 
-void lightShow(){
+void lightShow()
+{
   while (1)
   {
     int microfon_value = analogRead(A5);
@@ -445,7 +446,7 @@ void lightShow(){
     if (microfon_value > 540 && microfon_value < 600)
       redInt = greenInt = map(microfon_value, 560, 600, 0, 40);
     if (microfon_value > 600 && microfon_value < 1000)
-      redInt = greenInt = map(microfon_value, 560, 1000, 0, 255);
+      redInt = greenInt = blueInt = map(microfon_value, 560, 1000, 0, 255);
      
     analogWrite(redPin, redInt);
     analogWrite(greenPin, greenInt);
