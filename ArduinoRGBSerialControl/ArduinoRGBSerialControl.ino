@@ -440,13 +440,13 @@ void lightShow()
     if (microfon_value > 480 && microfon_value < 490)
       redInt = map(microfon_value, 480, 490, 0, 20);
     if (microfon_value > 490 && microfon_value < 520)
-      blueInt = map(microfon_value, 490, 520, 0, 20);
+      blueInt = map(microfon_value, 490, 520, 0, 30);
     if (microfon_value > 520 && microfon_value < 540)
-      greenInt = map(microfon_value, 520, 540, 0, 20);
+      greenInt = map(microfon_value, 520, 540, 0, 40);
     if (microfon_value > 540 && microfon_value < 600)
-      redInt = greenInt = map(microfon_value, 560, 600, 0, 40);
+      redInt = greenInt = map(microfon_value, 540, 600, 0, 40);
     if (microfon_value > 600 && microfon_value < 1000)
-      redInt = greenInt = blueInt = map(microfon_value, 560, 1000, 0, 255);
+      redInt = greenInt = blueInt = map(microfon_value, 600, 1000, 0, 255);
      
     analogWrite(redPin, redInt);
     analogWrite(greenPin, greenInt);
