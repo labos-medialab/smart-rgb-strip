@@ -1,12 +1,11 @@
 //definirani pwm izlaza
-const int r1Pin = 3, r2Pin = 9,
-          g1Pin = 5, g2Pin = 10,
-          b1Pin = 6, b2Pin = 11;
+const int rPin = 3,
+          gPin = 5,
+          bPin = 6;
 
 //definirane vrijednosti pwm izlaza
-int r1Int=0, g1Int=0, b1Int=0,
-    r2Int=0, g2Int=0, b2Int=0,
-    newr1Int=0, newg1Int=0, newb1Int=0;
+int rInt=0, gInt=0, bInt=0,
+    newrInt=0, newgInt=0, newbInt=0;
     
 int sFS=2,
     dFS=50,dB=255,
@@ -23,111 +22,74 @@ String prefixString = "";//pomoćni string
 String sufixString = "";//pomoćni string
 //String percentString = "%";//pomoćni string
 
-void setRGB(){
+void setRGB(bool timeout){
   fnc=0;
-  while(newr1Int != r1Int || newg1Int != g1Int || newb1Int != b1Int){
+  while(newrInt != rInt || newgInt != gInt || newbInt != bInt){
     
-    if(r1Int < newr1Int) r1Int++;
-    if(r1Int > newr1Int) r1Int--;
-    if(g1Int < newg1Int) g1Int++;
-    if(g1Int > newg1Int) g1Int--;
-    if(b1Int < newb1Int) b1Int++;
-    if(b1Int > newb1Int) b1Int--;
+    if(rInt < newrInt) rInt++;
+    if(rInt > newrInt) rInt--;
+    if(gInt < newgInt) gInt++;
+    if(gInt > newgInt) gInt--;
+    if(bInt < newbInt) bInt++;
+    if(bInt > newbInt) bInt--;
     
     if(Serial.available() > 0) serialEvent();    
-    delay(sFS);
+    if(timeout)delay(sFS);
     
-    analogWrite(r1Pin, r1Int); analogWrite(r2Pin, r2Int);
-    analogWrite(g1Pin, g1Int); analogWrite(g2Pin, g2Int);
-    analogWrite(b1Pin, b1Int); analogWrite(b2Pin, b2Int);
-  }
-  while(1) {
-    if(Serial.available() > 0) serialEvent();
+    analogWrite(rPin, rInt);
+    analogWrite(gPin, gInt);
+    analogWrite(bPin, bInt);
   }
 }
 
 void setup(){
-  analogWrite(r1Pin, 255); analogWrite(r2Pin, 255);delay(150);
-  analogWrite(r1Pin, 0); analogWrite(r2Pin, 0);delay(150);
-  analogWrite(g1Pin, 255); analogWrite(g2Pin, 255);delay(150);
-  analogWrite(g1Pin, 0); analogWrite(g2Pin, 0);delay(150);
-  analogWrite(b1Pin, 255); analogWrite(b2Pin, 255);delay(150);
-  analogWrite(b1Pin, 0); analogWrite(b2Pin, 0);
+  pinMode(rPin, OUTPUT);
+  pinMode(gPin, OUTPUT);
+  pinMode(bPin, OUTPUT);
+
+  newrInt = 255; newgInt = 0; newbInt = 0; setRGB(1);
+  newrInt = 0; newgInt = 0; newbInt = 0; setRGB(1);
+  newrInt = 0; newgInt = 255; newbInt = 0; setRGB(1);
+  newrInt = 0; newgInt = 0; newbInt = 0; setRGB(1);
+  newrInt = 0; newgInt = 0; newbInt = 255; setRGB(1);
+  newrInt = 0; newgInt = 0; newbInt = 0; setRGB(1);
   
   Serial.begin(9600);//serijska veza na 9600bps
-  
-  //definiranje outputa
-  pinMode(r1Pin, OUTPUT); pinMode(r2Pin, OUTPUT);
-  pinMode(g1Pin, OUTPUT); pinMode(g2Pin, OUTPUT);
-  pinMode(b1Pin, OUTPUT); pinMode(b2Pin, OUTPUT);
+  randomSeed(analogRead(0));
+
+  lightShow();
 }
 
-void loop(){}
+void loop(){
+
+}
 
 void serialEvent() {
   String tempString = "";
-  inputString=nullString;
-  while (Serial.available() > 0) {
-    inputString += (char)Serial.read();
-    delay(10);
-  }
-  
-  if(inputString=="dF") if(fnc!=1)dynamicRGB();
-  if(inputString=="pF") {
-    rFlag=1;gFlag=1;bFlag=1;
-    pFS=1500,pB=255;
-    if(fnc!=2)pulse();
-  }
-  if(inputString.startsWith("pF") && inputString.indexOf(":")<0 && inputString.indexOf(";")>0){
-    if(inputString.indexOf("r")>0)rFlag=1;
-    else rFlag=0;
-    if(inputString.indexOf("g")>0)gFlag=1;
-    else gFlag=0;
-    if(inputString.indexOf("b")>0)bFlag=1;
-    else bFlag=0;
-  }
-  
-  if(inputString.startsWith("#")){
-    int tempIntArray[6];
-    
-    for(int i=0;i<6;i++){
-      int tempInt=inputString.charAt(i+1);
-      if(tempInt<=57) tempIntArray[i]=tempInt - 48;
-      if(tempInt>64 && tempInt<71) tempIntArray[i]=tempInt - 55;
-      if(tempInt>95 && tempInt<103) tempIntArray[i]=tempInt - 87;
-    }
-    newr1Int = tempIntArray[0]*16 + tempIntArray[1];
-    newg1Int = tempIntArray[2]*16 + tempIntArray[3];
-    newb1Int = tempIntArray[4]*16 + tempIntArray[5];
-    setRGB();
-  }
-  
+  inputString = Serial.readStringUntil('\n');
+
   if(inputString.indexOf(":")>0){
     prefixString = inputString.substring(0,inputString.indexOf(':'));
     sufixString = inputString.substring(inputString.indexOf(':')+1,inputString.length());
     
     if(prefixString == "rgb"){
       tempString = sufixString.substring(0,sufixString.indexOf(','));
-      newr1Int = tempString.toInt();
+      newrInt = tempString.toInt();
       tempString = sufixString.substring(sufixString.indexOf(',')+1,sufixString.lastIndexOf(','));
-      newg1Int = tempString.toInt();
+      newgInt = tempString.toInt();
       tempString = sufixString.substring(sufixString.lastIndexOf(',')+1,sufixString.length());
-      newb1Int = tempString.toInt();
-      setRGB();
+      newbInt = tempString.toInt();
+      setRGB(1);
     }
     
-    if(prefixString == "sFS") sFS = sufixString.toInt();
-    if(prefixString == "dFS") dFS = sufixString.toInt();
-    if(prefixString == "dB") dB = sufixString.toInt();
-    
-    if(prefixString == "dF"){
+    if(prefixString == "df"){
       tempString = sufixString.substring(0,sufixString.indexOf(','));
       dFS = tempString.toInt();
       tempString = sufixString.substring(sufixString.indexOf(',')+1,sufixString.length());
       dB = tempString.toInt();
       if(fnc!=1) dynamicRGB();
     }
-    if(prefixString == "pF"){
+    if(prefixString == "pf"){
       if(sufixString.indexOf(";")>0){
         if(sufixString.indexOf("r")>0)rFlag=1;
         else rFlag=0;
@@ -147,56 +109,90 @@ void serialEvent() {
       if(fnc!=2) pulse();
     }
   }
+  
+  if(inputString=="df") if(fnc!=1)dynamicRGB();
+  if(inputString=="ls") if(fnc!=3)lightShow();
+  if(inputString=="pf") {
+    rFlag=1;gFlag=1;bFlag=1;
+    pFS=1500,pB=255;
+    if(fnc!=2)pulse();
+  }
+
+  if(inputString.startsWith("pf") && inputString.indexOf(":")<0 && inputString.indexOf(";")>0){
+    if(inputString.indexOf("r")>0)rFlag=1;
+    else rFlag=0;
+    if(inputString.indexOf("g")>0)gFlag=1;
+    else gFlag=0;
+    if(inputString.indexOf("b")>0)bFlag=1;
+    else bFlag=0;
+  }
+  
+  if(inputString.startsWith("#")){
+    int tempIntArray[6];
+    
+    for(int i=0;i<6;i++){
+      int tempInt=inputString.charAt(i+1);
+      if(tempInt<=57) tempIntArray[i]=tempInt - 48;
+      if(tempInt>64 && tempInt<71) tempIntArray[i]=tempInt - 55;
+      if(tempInt>95 && tempInt<103) tempIntArray[i]=tempInt - 87;
+    }
+    newrInt = tempIntArray[0]*16 + tempIntArray[1];
+    newgInt = tempIntArray[2]*16 + tempIntArray[3];
+    newbInt = tempIntArray[4]*16 + tempIntArray[5];
+    setRGB(1);
+  }
+
+  Serial.println(inputString);
 }
 
 void dynamicRGB(){
   fnc=1;
   delay(10);
-  while(r1Int +  g1Int  + b1Int != 0){
-    if(r1Int != 0) r1Int--;
-    if(g1Int != 0) g1Int--;
-    if(b1Int != 0) b1Int--;
-    analogWrite(r1Pin, r1Int);
-    analogWrite(g1Pin, g1Int);
-    analogWrite(b1Pin, b1Int);
+  while(rInt +  gInt  + bInt != 0){
+    if(rInt != 0) rInt--;
+    if(gInt != 0) gInt--;
+    if(bInt != 0) bInt--;
+    analogWrite(rPin, rInt);
+    analogWrite(gPin, gInt);
+    analogWrite(bPin, bInt);
     if (Serial.available() > 0) serialEvent();
     delay(dFS);
   }
   delay(10);
-  for (r1Int = 0; r1Int < dB+1; r1Int++){
+  for (rInt = 0; rInt < dB+1; rInt++){
     if (Serial.available() > 0) serialEvent();
-    analogWrite(r1Pin, r1Int);
+    analogWrite(rPin, rInt);
     delay(dFS);
   } 
   while (1){
-    for (b1Int = 0; b1Int < dB+1; b1Int++){
+    for (bInt = 0; bInt < dB+1; bInt++){
       if (Serial.available() > 0) serialEvent(); 
-      analogWrite(b1Pin, b1Int);
+      analogWrite(bPin, bInt);
       delay(dFS);
     } 
-    for (r1Int = dB; r1Int > 0; r1Int--){ 
+    for (rInt = dB; rInt > 0; rInt--){ 
       if (Serial.available() > 0) serialEvent(); 
-      analogWrite(r1Pin, r1Int);
+      analogWrite(rPin, rInt);
       delay(dFS);
     }
-    for (g1Int = 0; g1Int < dB+1; g1Int++){ 
+    for (gInt = 0; gInt < dB+1; gInt++){ 
       if (Serial.available() > 0) serialEvent(); 
-      analogWrite(g1Pin, g1Int);
+      analogWrite(gPin, gInt);
       delay(dFS);
     }
-    for (b1Int = dB; b1Int > 0; b1Int--){ 
+    for (bInt = dB; bInt > 0; bInt--){ 
       if (Serial.available() > 0) serialEvent(); 
-      analogWrite(b1Pin, b1Int);
+      analogWrite(bPin, bInt);
       delay(dFS);
     } 
-    for (r1Int = 0; r1Int < dB+1; r1Int++){ 
+    for (rInt = 0; rInt < dB+1; rInt++){ 
       if (Serial.available() > 0) serialEvent(); 
-      analogWrite(r1Pin, r1Int);
+      analogWrite(rPin, rInt);
       delay(dFS);
     } 
-    for (g1Int = dB; g1Int > 0; g1Int--){ 
+    for (gInt = dB; gInt > 0; gInt--){ 
       if (Serial.available() > 0) serialEvent(); 
-      analogWrite(g1Pin, g1Int);
+      analogWrite(gPin, gInt);
       delay(dFS);
     }
     if (Serial.available() > 0) serialEvent(); 
@@ -206,53 +202,133 @@ void dynamicRGB(){
 void pulse(){
   fnc=2;
   delay(10);
-  while(r1Int +  g1Int  + b1Int != 0){
-    if(r1Int != 0) r1Int--;
-    if(g1Int != 0) g1Int--;
-    if(b1Int != 0) b1Int--;
-    analogWrite(r1Pin, r1Int);
-    analogWrite(g1Pin, g1Int);
-    analogWrite(b1Pin, b1Int);
+  while(rInt +  gInt  + bInt != 0){
+    if(rInt != 0) rInt--;
+    if(gInt != 0) gInt--;
+    if(bInt != 0) bInt--;
+    analogWrite(rPin, rInt);
+    analogWrite(gPin, gInt);
+    analogWrite(bPin, bInt);
     if (Serial.available() > 0) serialEvent();
     delayMicroseconds(pFS);
   }
   while(1){
     if(rFlag){
-      for(r1Int=0; r1Int<=pB; r1Int++){
-        analogWrite(r1Pin, r1Int);
+      for(rInt=0; rInt<=pB; rInt++){
+        analogWrite(rPin, rInt);
         delayMicroseconds(pFS);
         if (Serial.available() > 0) serialEvent();
       }
-      for(r1Int=pB; r1Int>0; r1Int--){
-        analogWrite(r1Pin, r1Int);
+      for(rInt=pB; rInt>0; rInt--){
+        analogWrite(rPin, rInt);
         delayMicroseconds(pFS);
         if (Serial.available() > 0) serialEvent();
       }
     }
     if(gFlag){
-      for(g1Int=0; g1Int<=pB; g1Int++){
-        analogWrite(g1Pin, g1Int);
+      for(gInt=0; gInt<=pB; gInt++){
+        analogWrite(gPin, gInt);
         delayMicroseconds(pFS);
         if (Serial.available() > 0) serialEvent();
       }
-      for(g1Int=pB; g1Int>0; g1Int--){
-        analogWrite(g1Pin, g1Int);
+      for(gInt=pB; gInt>0; gInt--){
+        analogWrite(gPin, gInt);
         delayMicroseconds(pFS);
         if (Serial.available() > 0) serialEvent();
       }
     }
     if(bFlag){
-      for(b1Int=0; b1Int<=pB; b1Int++){
-        analogWrite(b1Pin, b1Int);
+      for(bInt=0; bInt<=pB; bInt++){
+        analogWrite(bPin, bInt);
         delayMicroseconds(pFS);
         if (Serial.available() > 0) serialEvent();
       }
-      for(b1Int=pB; b1Int>0; b1Int--){
-        analogWrite(b1Pin, b1Int);
+      for(bInt=pB; bInt>0; bInt--){
+        analogWrite(bPin, bInt);
         delayMicroseconds(pFS);
         if (Serial.available() > 0) serialEvent();
       }
     }
     if (Serial.available() > 0) serialEvent();
+  }
+}
+
+void lightShow(){
+  fnc=3;
+  delay(10);
+  newrInt = 0; newgInt = 0; newbInt = 0; setRGB(1);
+
+  /*
+  int k[3]={0,1,2},k1[3];
+  int tmp1 = random(3);
+  int smjer = random(2);
+
+  k1[0]=k[tmp1];
+  int j=1;
+  if(smjer){
+    for(int i=0;i<=2;i++){
+      if(i!=tmp1){
+        k1[j]=k[i]; j++;
+      }
+    }
+  }
+  else{
+    for(int i=2;i>=0;i--){
+      if(i!=tmp1){
+        k1[j]=k[i]; j++;
+      }
+    }
+  }
+
+  int randArray[3];
+  int tmp = random(1000);
+
+  randArray[k1[0]] = tmp;
+  if(tmp>=500) randArray[k1[1]] = random(500);
+  else randArray[k1[1]] = random(500,1000);
+  randArray[k1[2]] = random(1000);
+
+  sinR = randArray[0];
+  sinG = randArray[1];
+  sinB = randArray[2];
+
+  int deltaR = random(50);
+  int deltaG = random(50);
+  int deltaB = random(50);
+
+  if(sinR >= 500) deltaR=-deltaR;
+  if(sinG >= 500) deltaG=-deltaG;
+  if(sinB >= 500) deltaB=-deltaB;
+  /**/
+
+  int sinR=600, sinG=300, sinB=0;
+  int deltaR = 10;
+  int deltaG = 10;
+  int deltaB = 10;
+
+  while(1){
+
+    int micVal = analogRead(A5);
+
+    if(micVal > 480){
+      sinR += deltaR;
+      sinG += deltaG;
+      sinB += deltaB;
+
+      micVal = map(micVal, 480, 1024, 0, 255);
+
+      if(sinR <= 0 || sinR >= 900) deltaR=-deltaR;
+      if(sinG <= 0 || sinG >= 900) deltaG=-deltaG;
+      if(sinB <= 0 || sinB >= 900) deltaB=-deltaB;
+
+      rInt = map(sinR, 0, 900, 0, micVal);
+      gInt = map(sinG, 0, 900, 0, micVal);
+      bInt = map(sinR, 0, 900, 0, micVal);
+
+      setRGB(1);
+    }
+
+    if(Serial.available() > 0) break;
+
   }
 }
