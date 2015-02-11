@@ -431,22 +431,22 @@ void lightShow()
 {
   while (1)
   {
-    int microfon_value = analogRead(A5);
-    //Serial.println(microfon_value);
+    int microphone_value = analogRead(A5);
+    //Serial.println(microphone_value);
     if (Serial.available() > 0) break;
   
     redInt = blueInt = greenInt = 0;
     
-    if (microfon_value > 480 && microfon_value < 490)
-      redInt = map(microfon_value, 480, 490, 0, 20);
-    if (microfon_value > 490 && microfon_value < 520)
-      blueInt = map(microfon_value, 490, 520, 0, 30);
-    if (microfon_value > 520 && microfon_value < 540)
-      greenInt = map(microfon_value, 520, 540, 0, 40);
-    if (microfon_value > 540 && microfon_value < 600)
-      redInt = greenInt = map(microfon_value, 540, 600, 0, 40);
-    if (microfon_value > 600 && microfon_value < 1000)
-      redInt = greenInt = blueInt = map(microfon_value, 600, 1000, 0, 255);
+    if (microphone_value > 480 && microphone_value < 490)
+      redInt = map(microphone_value, 480, 490, 0, 20);
+    if (microphone_value > 490 && microphone_value < 520)
+      blueInt = map(microphone_value, 490, 520, 0, 30);
+    if (microphone_value > 520 && microphone_value < 540)
+      greenInt = map(microphone_value, 520, 540, 0, 40);
+    if (microphone_value > 540 && microphone_value < 600)
+      redInt = greenInt = map(microphone_value, 540, 600, 0, 40);
+    if (microphone_value > 600 && microphone_value < 1000)
+      redInt = greenInt = blueInt = map(microphone_value, 600, 1000, 0, 255);
      
     analogWrite(redPin, redInt);
     analogWrite(greenPin, greenInt);
