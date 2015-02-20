@@ -256,7 +256,9 @@ void pulse(){
 void lightShow(){
   fnc=3;
   delay(10);
+
   newrInt = 0; newgInt = 0; newbInt = 0; setRGB(1);
+  sFS=4;
 
   /*
   int k[3]={0,1,2},k1[3];
@@ -301,34 +303,48 @@ void lightShow(){
   if(sinB >= 500) deltaB=-deltaB;
   /**/
 
-  int sinR=600, sinG=300, sinB=0;
-  int deltaR = 10;
-  int deltaG = 10;
-  int deltaB = 10;
+  int colorArray[]{
+  	255,0,0,
+  	255,128,0,
+  	255,255,0,
+  	128,255,0,
+  	0,255,0,
+  	0,255,128,
+  	0,255,255,
+  	0,128,255,
+  	0,0,255,
+  	128,0,255,
+  	255,0,255,
+  	255,0,128,
+  	255,128,128,
+  	128,255,128,
+  	128,128,255,
+  	255,255,128,
+  	128,255,255,
+  	255,128,255,
+  	255,255,255
+  };
 
   while(1){
-
     int micVal = analogRead(A5);
-
     if(micVal > 480){
-      sinR += deltaR;
-      sinG += deltaG;
-      sinB += deltaB;
-
       micVal = map(micVal, 480, 1024, 0, 255);
 
-      if(sinR <= 0 || sinR >= 900) deltaR=-deltaR;
-      if(sinG <= 0 || sinG >= 900) deltaG=-deltaG;
-      if(sinB <= 0 || sinB >= 900) deltaB=-deltaB;
+      int i = random(19), j=i*3;
+      newrInt = colorArray[j];
+      newgInt = colorArray[j+1];
+      newbInt = colorArray[j+2];
 
-      rInt = map(sinR, 0, 900, 0, micVal);
-      gInt = map(sinG, 0, 900, 0, micVal);
-      bInt = map(sinR, 0, 900, 0, micVal);
+      newrInt = map(newrInt, 0, 255, 0, micVal);
+      newgInt = map(newgInt, 0, 255, 0, micVal);
+      newbInt = map(newbInt, 0, 255, 0, micVal);
+      setRGB(1);
 
+      newrInt = 0;
+      newgInt = 0;
+      newbInt = 0;
       setRGB(1);
     }
-
     if(Serial.available() > 0) break;
-
   }
 }
