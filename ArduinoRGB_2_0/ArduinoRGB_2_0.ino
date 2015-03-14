@@ -67,12 +67,14 @@ void loop(){
 void serialEvent() {
   String tempString = "";
   inputString = Serial.readStringUntil('\n');
-
+  Serial.println(inputString);
+  
   if(inputString.indexOf(":")>0){
     prefixString = inputString.substring(0,inputString.indexOf(':'));
     sufixString = inputString.substring(inputString.indexOf(':')+1,inputString.length());
     
     if(prefixString == "rgb"){
+      fnc=-1;
       tempString = sufixString.substring(0,sufixString.indexOf(','));
       newrInt = tempString.toInt();
       tempString = sufixString.substring(sufixString.indexOf(',')+1,sufixString.lastIndexOf(','));
@@ -117,7 +119,18 @@ void serialEvent() {
     pFS=1500,pB=255;
     if(fnc!=2)pulse();
   }
-
+  if(inputString=="off"){
+    fnc=-1;
+    newrInt = 0;
+    newgInt = 0;
+    newbInt = 0;
+    setRGB(1);
+  }
+  
+  if(inputString.startsWith("help")){
+    Serial.print(F("LOL\nno help for you!\n"));
+  }
+  
   if(inputString.startsWith("pf") && inputString.indexOf(":")<0 && inputString.indexOf(";")>0){
     if(inputString.indexOf("r")>0)rFlag=1;
     else rFlag=0;
@@ -129,7 +142,7 @@ void serialEvent() {
   
   if(inputString.startsWith("#")){
     int tempIntArray[6];
-    
+    fnc = -1;
     for(int i=0;i<6;i++){
       int tempInt=inputString.charAt(i+1);
       if(tempInt<=57) tempIntArray[i]=tempInt - 48;
@@ -141,8 +154,6 @@ void serialEvent() {
     newbInt = tempIntArray[4]*16 + tempIntArray[5];
     setRGB(1);
   }
-
-  Serial.println(inputString);
 }
 
 void dynamicRGB(){
@@ -155,47 +166,47 @@ void dynamicRGB(){
     analogWrite(rPin, rInt);
     analogWrite(gPin, gInt);
     analogWrite(bPin, bInt);
-    if (Serial.available() > 0) serialEvent();
+    if (Serial.available() > 0) {break; serialEvent();}
     delay(dFS);
   }
   delay(10);
   for (rInt = 0; rInt < dB+1; rInt++){
-    if (Serial.available() > 0) serialEvent();
+    if (Serial.available() > 0) {break; serialEvent();}
     analogWrite(rPin, rInt);
     delay(dFS);
   } 
   while (1){
     for (bInt = 0; bInt < dB+1; bInt++){
-      if (Serial.available() > 0) serialEvent(); 
+      if (Serial.available() > 0) {break; serialEvent();} 
       analogWrite(bPin, bInt);
       delay(dFS);
     } 
     for (rInt = dB; rInt > 0; rInt--){ 
-      if (Serial.available() > 0) serialEvent(); 
+      if (Serial.available() > 0) {break; serialEvent();} 
       analogWrite(rPin, rInt);
       delay(dFS);
     }
     for (gInt = 0; gInt < dB+1; gInt++){ 
-      if (Serial.available() > 0) serialEvent(); 
+      if (Serial.available() > 0) {break; serialEvent();} 
       analogWrite(gPin, gInt);
       delay(dFS);
     }
     for (bInt = dB; bInt > 0; bInt--){ 
-      if (Serial.available() > 0) serialEvent(); 
+      if (Serial.available() > 0) {break; serialEvent();} 
       analogWrite(bPin, bInt);
       delay(dFS);
     } 
     for (rInt = 0; rInt < dB+1; rInt++){ 
-      if (Serial.available() > 0) serialEvent(); 
+      if (Serial.available() > 0) {break; serialEvent();} 
       analogWrite(rPin, rInt);
       delay(dFS);
     } 
     for (gInt = dB; gInt > 0; gInt--){ 
-      if (Serial.available() > 0) serialEvent(); 
+      if (Serial.available() > 0) {break; serialEvent();} 
       analogWrite(gPin, gInt);
       delay(dFS);
     }
-    if (Serial.available() > 0) serialEvent(); 
+    if (Serial.available() > 0) {break; serialEvent();} 
   }
 }
 
@@ -209,7 +220,7 @@ void pulse(){
     analogWrite(rPin, rInt);
     analogWrite(gPin, gInt);
     analogWrite(bPin, bInt);
-    if (Serial.available() > 0) serialEvent();
+    if (Serial.available() > 0) {break; serialEvent();}
     delayMicroseconds(pFS);
   }
   while(1){
@@ -217,39 +228,39 @@ void pulse(){
       for(rInt=0; rInt<=pB; rInt++){
         analogWrite(rPin, rInt);
         delayMicroseconds(pFS);
-        if (Serial.available() > 0) serialEvent();
+        if (Serial.available() > 0) {break; serialEvent();}
       }
       for(rInt=pB; rInt>0; rInt--){
         analogWrite(rPin, rInt);
         delayMicroseconds(pFS);
-        if (Serial.available() > 0) serialEvent();
+        if (Serial.available() > 0) {break; serialEvent();}
       }
     }
     if(gFlag){
       for(gInt=0; gInt<=pB; gInt++){
         analogWrite(gPin, gInt);
         delayMicroseconds(pFS);
-        if (Serial.available() > 0) serialEvent();
+        if (Serial.available() > 0) {break; serialEvent();}
       }
       for(gInt=pB; gInt>0; gInt--){
         analogWrite(gPin, gInt);
         delayMicroseconds(pFS);
-        if (Serial.available() > 0) serialEvent();
+        if (Serial.available() > 0) {break; serialEvent();}
       }
     }
     if(bFlag){
       for(bInt=0; bInt<=pB; bInt++){
         analogWrite(bPin, bInt);
         delayMicroseconds(pFS);
-        if (Serial.available() > 0) serialEvent();
+        if (Serial.available() > 0) {break; serialEvent();}
       }
       for(bInt=pB; bInt>0; bInt--){
         analogWrite(bPin, bInt);
         delayMicroseconds(pFS);
-        if (Serial.available() > 0) serialEvent();
+        if (Serial.available() > 0) {break; serialEvent();}
       }
     }
-    if (Serial.available() > 0) serialEvent();
+    if (Serial.available() > 0) {break; serialEvent();}
   }
 }
 
