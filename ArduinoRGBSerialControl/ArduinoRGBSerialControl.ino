@@ -75,11 +75,7 @@ void loop() {
 }
 
 void serialEvent() {
-  inputString=nullString;
-  while (Serial.available() > 0) {
-    inputString += (char)Serial.read();
-    delay(10);
-  }
+  inputString=Serial.readStringUntil(10);
 }
 
 void pretvorba(){
